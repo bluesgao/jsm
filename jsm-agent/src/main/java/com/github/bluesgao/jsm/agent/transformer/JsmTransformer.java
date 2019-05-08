@@ -25,6 +25,7 @@ public class JsmTransformer implements ClassFileTransformer {
     private static final Map<String, MonitorMethod> MONITOR_METHODS;
     private static final Map<ClassLoader, ClassPool> CLASS_POOL_MAP;
 
+    @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
         //过滤不需要监控的类
         if (!AgentUtils.ignoreClass(className)) {
@@ -40,7 +41,7 @@ public class JsmTransformer implements ClassFileTransformer {
                 Set<CtMethod> monitoredMethods = AnnotationMonitorCfg.getMonitoredMethods(loader, ctClass);
                 if (monitoredMethods != null && !monitoredMethods.isEmpty()) {
                     //改写class
-                    LOGGER.log(Level.INFO, "改写class:" + ctClass.getName());
+                    LOGGER.log(Level.INFO, "改写开始:" + ctClass.getName());
 
                     byte[] ehancedByteCode = null;
                     try {
@@ -50,6 +51,7 @@ public class JsmTransformer implements ClassFileTransformer {
                         e.printStackTrace();
                     }
                     if (ehancedByteCode != null) {
+                        LOGGER.log(Level.INFO, "改写成功:" + ctClass.getName());
                         return ehancedByteCode;
                     }
                 }

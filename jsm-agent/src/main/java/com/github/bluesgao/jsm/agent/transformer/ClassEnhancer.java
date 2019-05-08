@@ -6,11 +6,15 @@ import javassist.CtNewMethod;
 import javassist.bytecode.AccessFlag;
 
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * class增强器
  */
 public class ClassEnhancer {
+    private static final Logger LOGGER = Logger.getLogger(ClassEnhancer.class.getCanonicalName());
+
     private static final String START_TIME = "\nlong startTime = System.currentTimeMillis();\n";
     private static final String END_TIME = "\nlong endTime = System.currentTimeMillis();\n";
     private static final String METHOD_RUTURN_VALUE_VAR = "__time_monitor_result";
@@ -26,10 +30,14 @@ public class ClassEnhancer {
      */
     public static byte[] enhance(ClassLoader loader, CtClass ctClass, Set<CtMethod> ctMethods) throws Exception {
         for (CtMethod ctMethod : ctMethods) {
+            LOGGER.log(Level.INFO, "ClassEnhancer enhance ctMethod：" + ctMethod.getMethodInfo() + ",modifiers:" + ctMethod.getModifiers());
             try {
-                if (AccessFlag.isPackage(ctMethod.getModifiers())) {
+                //native方法和abstract方法忽略
+                if (ctMethod.getModifiers() != AccessFlag.NATIVE || ctMethod.getModifiers() != AccessFlag.ABSTRACT) {
+
                     String className = ctClass.getName();
                     String methodName = AgentUtils.getMethodDesc(ctMethod.getName(), ctMethod.getParameterTypes());
+                    LOGGER.log(Level.INFO, "ClassEnhancer enhance className：" + className + ", methodName:" + methodName);
 
                     StringBuffer beforeCode = new StringBuffer();
                     beforeCode.append(String.format("System.out.println(%s);", String.format("asm appName:%s, className:%s, methodName:%s, input:%s ", "testapp", className, methodName)));
@@ -55,10 +63,9 @@ public class ClassEnhancer {
     }
 
     public static byte[] enhance2(ClassLoader loader, CtClass ctClass, Set<CtMethod> ctMethods) throws Exception {
-
-
         for (CtMethod ctMethod : ctMethods) {
-            if (AccessFlag.isPackage(ctMethod.getModifiers())) {
+            //native方法和abstract方法忽略
+            if (ctMethod.getModifiers() != AccessFlag.NATIVE || ctMethod.getModifiers() != AccessFlag.ABSTRACT) {
                 //获取原始方法名称
                 String methodName = ctMethod.getName();
                 String monitorStr = "\nSystem.out.println(\"method " + ctMethod.getLongName() + " cost:\" +(endTime - startTime) +\"ms.\");";
