@@ -1,7 +1,5 @@
 HELP.md
 /target/
-jsm-agent/target/
-jsm-example/target/
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
@@ -34,20 +32,13 @@ jsm-example/target/
 ### MVN ###
 .mvn/
 mvnw*
-
-
-##ignore this file##
-/target/ 
-.classpath
-.project
-
-.settings     
-
- ##filter databfile、sln file##
+  
+###filter databfile、sln file###
 *.mdb  
 *.ldb  
 *.sln    
-##class file##
+
+###class file###
 *.com  
 *.class  
 *.dll  
@@ -55,7 +46,7 @@ mvnw*
 *.o  
 *.so  
 
-# compression file
+###compression file###
 *.7z  
 *.dmg  
 *.gz  
@@ -67,3 +58,13 @@ mvnw*
 *.via
 *.tmp
 *.err 
+
+###OS generated files###
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
