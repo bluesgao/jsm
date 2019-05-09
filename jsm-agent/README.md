@@ -1,5 +1,23 @@
-Jsm-agent
-* 使用jvm插装技术，在jvm加载class文件时将监控代码插入其中，然后将监控日志写入文件
-* 使用sigar或者oshi获取服务器相关信息（包括操作系统、jvm、cpu、内存、硬盘、网络、io等）
-* 使用java Runtime，ManagementFactory 获取jvm相关信息
-* 使用javax.management NotificationListener获取gc相关信息
+##Jsm-agent
+####使用jvm插装技术，在jvm加载class文件时将监控代码插入其中，然后将监控日志写入文件。
+######java annotation模式（此方式对业务系统有入侵）
+    1，应用中添加 jsm-annotation-[version].jar包
+    2，在需要监控的类上添加注解@MonitorClass
+    3，在需要监控的方法上添加注解@MonitorMethod
+######agentArgs模式（此方式对业务系统无入侵，推荐使用）
+    1，在JVM启动参数中添加以下内容
+    -javaagent:/绝对路径/jsm-agent-[version].jar=
+    {
+      "appName": "testapp",
+      "monitor": {
+        "class1": [
+          "method1",
+          "method2"
+        ],
+        "class2": [
+          "method1",
+          "method2"
+        ]
+      }
+    }
+    2，在agentArgs参数的monitor中配置自定义需要监控的全限定类名和方法名。
