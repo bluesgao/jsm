@@ -1,5 +1,5 @@
 D:\study\code\jsm\jsm-agent\src\main\java\com\github\bluesgao\jsm\agent\transformer\ClassEnhancer.java
-D:\study\code\jsm\jsm-agent\src\main\java\com\github\bluesgao\jsm\agent\monitorcfg\AnnotationMonitorCfg.java
+D:\study\code\jsm\jsm-agent\src\main\java\com\github\bluesgao\jsm\agent\config\MonitorCfg.java
 D:\study\code\jsm\jsm-agent\src\main\java\com\github\bluesgao\jsm\agent\transformer\JsmTransformer.java
 D:\study\code\jsm\jsm-agent\src\main\java\com\github\bluesgao\jsm\agent\JsmAgent.java
 D:\study\code\jsm\jsm-agent\src\main\java\com\github\bluesgao\jsm\agent\transformer\AgentUtils.java

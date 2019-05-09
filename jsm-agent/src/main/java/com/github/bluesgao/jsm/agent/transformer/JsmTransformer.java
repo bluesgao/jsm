@@ -1,7 +1,8 @@
 package com.github.bluesgao.jsm.agent.transformer;
 
-import com.github.bluesgao.jsm.agent.monitorcfg.AnnotationMonitorCfg;
+import com.github.bluesgao.jsm.agent.config.MonitorCfg;
 import com.github.bluesgao.jsm.annotation.MonitorMethod;
+import com.github.bluesgao.jsm.common.util.JsonUtils;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
@@ -24,11 +25,30 @@ public class JsmTransformer implements ClassFileTransformer {
     private static final Logger LOGGER = Logger.getLogger(JsmTransformer.class.getCanonicalName());
     private static final Map<String, MonitorMethod> MONITOR_METHODS;
     private static final Map<ClassLoader, ClassPool> CLASS_POOL_MAP;
+    private Map agentArgsMap;
+
+    public JsmTransformer(String agentArgs) {
+        LOGGER.log(Level.INFO, "JsmTransformer agentArgs:" + agentArgs);
+        /*
+         * {
+         *   monitor:{
+         *       "className1":[methodName1,methodName2],
+         *       "className2":[methodName1,methodName2]
+         *   }
+         * }
+         * */
+        //将agentargs转换为map
+        agentArgsMap = JsonUtils.json2map(agentArgs);
+        LOGGER.log(Level.INFO, "JsmTransformer agentArgsMap:" + agentArgsMap.toString());
+    }
 
     @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
         //过滤不需要监控的类
         if (!AgentUtils.ignoreClass(className)) {
+            //将className中的/转换为.
+            className = className.replace("/", ".");
+
             LOGGER.log(Level.INFO, "transform className:" + className);
             CtClass ctClass = null;
             try {
@@ -38,7 +58,9 @@ public class JsmTransformer implements ClassFileTransformer {
             }
 
             if (ctClass != null) {
-                Set<CtMethod> monitoredMethods = AnnotationMonitorCfg.getMonitoredMethods(loader, ctClass);
+                Set<CtMethod> monitoredMethods = MonitorCfg.allMonitoredMethods(loader, ctClass, (Map) agentArgsMap.get("monitor"));
+                LOGGER.log(Level.INFO, "allMonitoredMethods:" + monitoredMethods.toString());
+
                 if (monitoredMethods != null && !monitoredMethods.isEmpty()) {
                     //改写class
                     LOGGER.log(Level.INFO, "改写开始:" + ctClass.getName());

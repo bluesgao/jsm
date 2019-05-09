@@ -2,7 +2,6 @@ package com.github.bluesgao.jsm.agent;
 
 
 import com.github.bluesgao.jsm.agent.transformer.JsmTransformer;
-import com.github.bluesgao.jsm.common.util.LogUtils;
 
 import java.lang.instrument.Instrumentation;
 import java.util.logging.Level;
@@ -16,9 +15,9 @@ public class JsmAgent {
     }
 
     private static void init(String agentArgs, Instrumentation inst) {
-        LOGGER.log(Level.INFO, "jsm agent instrumentation premain start."+agentArgs);
+        LOGGER.log(Level.INFO, "jsm agent instrumentation premain start. agentArgs:" + agentArgs);
         //添加字节码转换器
-        inst.addTransformer(new JsmTransformer(), false);
+        inst.addTransformer(new JsmTransformer(agentArgs), false);
 
         //jvm关闭的回调
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {

@@ -1,6 +1,6 @@
-com\github\bluesgao\jsm\agent\monitorcfg\AnnotationMonitorCfg.class
 com\github\bluesgao\jsm\agent\JsmAgent$1.class
 com\github\bluesgao\jsm\agent\transformer\AgentUtils.class
 com\github\bluesgao\jsm\agent\JsmAgent.class
 com\github\bluesgao\jsm\agent\transformer\ClassEnhancer.class
 com\github\bluesgao\jsm\agent\transformer\JsmTransformer.class
+com\github\bluesgao\jsm\agent\config\MonitorCfg.class
