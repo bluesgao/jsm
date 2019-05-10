@@ -68,7 +68,7 @@ public class JsmTransformer implements ClassFileTransformer {
                     byte[] ehancedByteCode = null;
                     try {
                         //增强class
-                        ehancedByteCode = ClassEnhancer.enhance2(loader, ctClass, monitoredMethods);
+                        ehancedByteCode = ClassEnhancer.enhance(loader, ctClass, monitoredMethods);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

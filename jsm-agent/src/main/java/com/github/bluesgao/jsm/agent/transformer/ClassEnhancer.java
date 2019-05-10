@@ -37,21 +37,37 @@ public class ClassEnhancer {
 
                     String className = ctClass.getName();
                     String methodName = AgentUtils.getMethodDesc(ctMethod.getName(), ctMethod.getParameterTypes());
+                    //String methodName = ctMethod.getName();
+
                     LOGGER.log(Level.INFO, "ClassEnhancer enhance className：" + className + ", methodName:" + methodName);
 
-                    StringBuffer beforeCode = new StringBuffer();
-                    beforeCode.append(String.format("System.out.println(%s);", String.format("asm appName:%s, className:%s, methodName:%s, input:%s ", "testapp", className, methodName)));
+                    String appName = "testapp";
+                    //应用名称-类名-方法名-输入-输出-异常
+                    String monitorStr = String.format("JSM MONITOR-[%s]-[%s]-[%s]-[%s]-[%s]-[%s] ", appName, className, methodName, null, null, null);
+                    String sout = "System.out.println(\"%s\");";
 
-                    StringBuffer afterCode = new StringBuffer();
-                    afterCode.append(String.format("System.out.println(%s);", String.format("asm appName:%s, className:%s, methodName:%s, output:%s ", "testapp", className, methodName)));
+                    //StringBuffer beforeCode = new StringBuffer();
+                    //beforeCode.append(String.format(sout, commonStr + "input[" + null + "]"));
 
-                    StringBuffer catchCode = new StringBuffer();
-                    afterCode.append(String.format("System.out.println(%s);", String.format("asm appName:%s, className:%s, methodName:%s, e:%s ", "testapp", className, methodName)));
+                    //StringBuffer afterCode = new StringBuffer();
+                    //afterCode.append(String.format(sout, commonStr + "output[" + null + "]"));
 
-                    CtClass throwableClass = ctClass.getClassPool().get(Throwable.class.getCanonicalName());
-                    ctMethod.insertBefore(beforeCode.toString());
-                    ctMethod.insertAfter(afterCode.toString(), false);
-                    ctMethod.addCatch(catchCode.toString(), throwableClass);
+                    //tringBuffer catchCode = new StringBuffer();
+                    //catchCode.append(String.format(sout, commonStr + "exception[" + null + "]"));
+
+                    //CtClass throwableClass = ctClass.getClassPool().get(Throwable.class.getCanonicalName());
+
+                    //LOGGER.log(Level.INFO, "ClassEnhancer enhance beforeCode：" + beforeCode.toString());
+                    //LOGGER.log(Level.INFO, "ClassEnhancer enhance afterCode：" + afterCode.toString());
+                    //LOGGER.log(Level.INFO, "ClassEnhancer enhance catchCode：" + catchCode.toString());
+
+                    //ctMethod.insertBefore(beforeCode.toString());
+                    //ctMethod.insertAfter(afterCode.toString(), true);
+                    //ctMethod.addCatch(catchCode.toString(), throwableClass);
+
+                    StringBuffer insertCode = new StringBuffer();
+                    insertCode.append(String.format(sout, monitorStr));
+                    ctMethod.insertAfter(insertCode.toString(), true);
                 }
             } catch (Throwable e) {
                 e.printStackTrace();

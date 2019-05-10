@@ -7,6 +7,5 @@ public class App {
         userService.setUserName("aaaa");
         userService.getUserName2("2222");
         userService.setUserName2("bbbb");
-
     }
 }
